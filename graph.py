@@ -87,7 +87,7 @@ class Graph :
             Retourne True si le graphe contient au moins un circuit False sinon
             ecrit également le resultat sur la propriété contient circuit
 
-            Version: 1.0
+            Version: 1.1
         """
 
         lSommets = list(range(0,self.nbSommets))
