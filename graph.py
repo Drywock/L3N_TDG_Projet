@@ -1,10 +1,10 @@
 """
     file : graph.py
     author(s) : Thomas LINTANF
-    Version : 2.0
+    Version : 3.0
 
     Definition de la classe Graph qui permet de stocker un graph orienter et de lui
-    appliquer différent algorithme.
+    appliquer différents algorithmes.
 """
 
 import csv
@@ -13,14 +13,14 @@ class Graph :
     """ 
         classe Graph  : représente un graphe orienté 
         
-        Version: 2.0
+        Version: 3.0
     """
 
     def __init__(self):
         """ 
             constructeur de la classe Graph
 
-            Version: 2.0
+            Version: 3.0
         """
 
         self.nbSommets = 0
@@ -28,42 +28,42 @@ class Graph :
         self.mAdjacence = []
         self.mValeurs = []
         self.contientCircuit = 0
+        self.rang = []
 
     def readFile(self,address):
         """
             Charge un graphe depuis un fichier txt au format csv
 
-            version : 1.0
+            version : 1.1
         """
-
+        lRows = []
         with open(address) as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quoting = csv.QUOTE_NONNUMERIC)
             # stockage temporaire des données dans un tableau
-            lRows = []
             for row in reader:
                 lRows.append(row)
 
-            # extraction du nombre de sommets et d'arcs
-            self.nbSommets = int(lRows[0][0])
-            self.nbArcs = int(lRows[1][0])
+        # extraction du nombre de sommets et d'arcs
+        self.nbSommets = int(lRows[0][0])
+        self.nbArcs = int(lRows[1][0])
 
-            # Initialisation des matrices d'adjacense et des valeurs
-            for si in range(0, self.nbSommets):
-                lA = []
-                lV = []
-                for sJ in range(0, self.nbSommets):
-                    lA.append(False)
-                    lV.append('*')
-                self.mAdjacence.append(lA)
-                self.mValeurs.append(lV)
-            
-            # écriture des arcs dans les matrice
-            for arc in lRows[2:]:
-                sd = int(arc[0])
-                sa = int(arc[1])
-                p = arc[2]
-                self.mAdjacence[sd][sa] = True
-                self.mValeurs[sd][sa] = p
+        # Initialisation des matrices d'adjacense et des valeurs
+        for si in range(0, self.nbSommets):
+            lA = []
+            lV = []
+            for sJ in range(0, self.nbSommets):
+                lA.append(False)
+                lV.append('*')
+            self.mAdjacence.append(lA)
+            self.mValeurs.append(lV)
+        
+        # écriture des arcs dans les matrice
+        for arc in lRows[2:]:
+            sd = int(arc[0])
+            sa = int(arc[1])
+            p = arc[2]
+            self.mAdjacence[sd][sa] = True
+            self.mValeurs[sd][sa] = p
 
     # to do: Améliorer l'affichage des matices
     def __str__(self):
@@ -110,10 +110,49 @@ class Graph :
             for s in sToDel:
                 lSommets.remove(s)
 
-            # Sortie de boucle si on a pas retirer de sommets ou qu'il n'en reste plus
-            continuer = len(sToDel)>0 & len(lSommets)>0
+            # Sortie de boucle si on a pas retiré de sommets 
+            continuer = len(sToDel)>0
 
         # On regarde si il reste des Sommets pour savoir si il y a un circuit
         self.contientCircuit = len(lSommets) != 0
 
         return self.contientCircuit
+
+    def calcRang(self):
+        """
+            Calcule le rang de chaque sommet du graphe
+
+            version: 1.0
+        """
+        
+        if (self.contientCircuit):
+            print("Impossible de Calculer les rangs à cause d'un circuit")
+        
+        else:
+            # Intialisation de la liste des rangs
+            for i in range(0, self.nbSommets):
+                self.rang.append(0)
+
+            lSommets = list(range(0,self.nbSommets))
+            continuer = True
+            rang = 0
+
+            while(continuer):
+                # Recherche des sommets sans prédécesseur
+                sToDel = []
+                for sommet in lSommets:
+                    pred = False
+                    for s in lSommets:
+                        pred = pred | self.mAdjacence[s][sommet]
+                    
+                    if(pred == False):
+                        sToDel.append(sommet)
+
+                # Suppression des sommets sans prédécesseur
+                for s in sToDel:
+                    lSommets.remove(s)
+                    self.rang[s] = rang
+                
+                rang+= 1
+
+                continuer = len(lSommets) > 0
