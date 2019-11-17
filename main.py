@@ -1,7 +1,7 @@
 """
     file : main.py
     author(s) : Thomas LINTANF
-    version : 1.0
+    version : 1.1
 """
 
 import logging as log
@@ -11,7 +11,7 @@ def main():
     """
         Programme principal
 
-        Version : 1.0
+        Version : 1.1
     """
     print('Bienvenue !')
 
