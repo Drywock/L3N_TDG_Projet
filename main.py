@@ -1,7 +1,7 @@
 """
     file : main.py
     author(s) : Thomas LINTANF
-    version : 1.1
+    version : 2.0
 """
 
 import logging as log
@@ -11,7 +11,7 @@ def main():
     """
         Programme principal
 
-        Version : 1.1
+        Version : 2.0
     """
     print('Bienvenue !')
 
@@ -20,10 +20,10 @@ def main():
     while(continuer):
         reponse = int(input('Choisissez un graphe entre 1 et 10 (0 pour quitter): '))
 
-        if (reponse == 0):
+        if reponse == 0:
             continuer = False
 
-        elif(reponse < 1 or reponse > 10 ):
+        elif reponse < 1 or reponse > 10 :
             print("Reponse invalide !")
 
         else:
@@ -36,6 +36,8 @@ def main():
             log.info(g)
             if not g.detectionCircuit():
                 g.calcRang()
+                if g.estGraphOrdonnancement():
+                    pass
 
             log.getLogger('').removeHandler(fileHandler)
 

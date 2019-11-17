@@ -1,7 +1,7 @@
 """
     file : graph.py
-    author(s) : Thomas LINTANF
-    Version : 3.1
+    author(s) : Thomas LINTANF, Laurent CALYDON
+    Version : 4.0
 
     Definition de la classe Graph qui permet de stocker un graph orienter et de lui
     appliquer différents algorithmes.
@@ -186,3 +186,64 @@ class Graph :
             log.info("Graphe vide\nRangs calcules")
             log.info("Sommets {0}".format(list(range(0,self.nbSommets))))
             log.info("Rang {0}".format(self.rang))
+
+    def estGraphOrdonnancement(self):
+        """
+            Vérifie si c'est un graphe d'ordonnancement
+
+            Version = 1.0
+        """
+
+        log.info("Verification qu'il s'agit d'un graphe d'ordonnancement :")
+
+        #Détection d'un seul point d'entrée
+        res = self.rang.count(0) == 1
+        log.info("A qu'un seul point d'entree : {0}".format(res))
+
+        #Détection d'un seul point de sortie
+        ans = self.rang.count(max(self.rang)) == 1
+        log.info("A qu'un seul point de sortie : {0}".format(ans))
+        res = res and ans
+
+        #Vérification de la présence d'un circuit
+        ans = not self.contientCircuit
+        log.info("Ne contient pas un circuit: {0}".format(ans))
+        res = res and ans
+
+        #Vérification des valeurs identiques pour tous les arcs incidents vers l’extérieur à un sommet
+        ans = True
+        for ligne in self.mValeurs:
+            i = 0
+
+            while ligne[i] == '*' and i < self.nbSommets-1:
+                i+=1
+
+            #Vérification pas d’arcs à valeur négative.
+            isPos = True
+            if ligne[i] != '*':
+                isPos = ligne[i] >= 0
+            ans = ans and isPos
+
+            for case in ligne:
+                ans = ans and (case == '*' or case == ligne[i] )
+        log.info("Arcs incidents exterieurs positifs et egaux pour chaque sommets: {0}".format(ans))
+        res = res and ans
+
+        #arcs incidents vers l’extérieur au point d’entrée de valeur nulle
+        i = 0
+        while  self.rang[i] != 0 and i < self.nbSommets-1:
+            i += 1
+
+        ans = True
+        for case in self.mValeurs[i]:
+            ans = ans and (case == '*' or case == 0 )
+
+        log.info("Arcs incidents exterieurs du point d'entree a valeur 0 : {0}".format(res))
+        res = res and ans
+
+        if res :
+            log.info("Le graphe est un graphe d'ordonnancement")
+        else :
+            log.info("Le graphe n'est pas un graphe d'ordonnancement")
+
+        return res
