@@ -1,7 +1,7 @@
 """
     file : main.py
     author(s) : Thomas LINTANF
-    version : 1.0
+    version : 1.1
 """
 
 import logging as log
@@ -11,7 +11,7 @@ def main():
     """
         Programme principal
 
-        Version : 1.0
+        Version : 1.1
     """
     print('Bienvenue !')
 
@@ -27,12 +27,17 @@ def main():
             print("Reponse invalide !")
 
         else:
-            log.basicConfig(filename='L3N_B10_trace{0}.txt'.format(reponse),format='%(message)s' , level=log.DEBUG)
+            log.basicConfig(format='%(message)s' , level=log.DEBUG)
+            fileHandler = log.FileHandler(filename='L3N_B10_trace{0}.txt'.format(reponse), mode='w')
+            log.getLogger('').addHandler(fileHandler)
+
             g = Graph()
             g.readFile('L3N_B10_g{0}.txt'.format(reponse))
             log.info(g)
             if not g.detectionCircuit():
                 g.calcRang()
+
+            log.getLogger('').removeHandler(fileHandler)
 
 def testGraph():
     """
