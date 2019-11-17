@@ -1,7 +1,7 @@
 """
     file : graph.py
     author(s) : Thomas LINTANF, Laurent CALYDON
-    Version : 4.0
+    Version : 5.0
 
     Definition de la classe Graph qui permet de stocker un graph orienter et de lui
     appliquer différents algorithmes.
@@ -14,14 +14,14 @@ class Graph :
     """ 
         classe Graph  : représente un graphe orienté 
         
-        Version: 3.1
+        Version: 4.0
     """
 
     def __init__(self):
         """ 
             constructeur de la classe Graph
 
-            Version: 3.0
+            Version: 4.0
         """
 
         self.nbSommets = 0
@@ -30,19 +30,24 @@ class Graph :
         self.mValeurs = []
         self.contientCircuit = 'u'
         self.rang = []
+        self.estOrdonnancement = 'u'
+        self.datesAuPlusTot = []
+        self.datesAuPlusTard =[]
+        self.margesTotales = []
+        self.margesLibres = []
 
     def readFile(self,address):
         """
             Charge un graphe depuis un fichier txt au format csv
 
-            version : 1.2
+            version : 1.3
         """
         lRows = []
         with open(address) as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quoting = csv.QUOTE_NONNUMERIC)
             # stockage temporaire des données dans un tableau
             for row in reader:
-                lRows.append(row)
+                lRows.append([int(i) for i in row])
         log.info('Chargement du fichier : ' + address)
 
         # extraction du nombre de sommets et d'arcs
@@ -144,7 +149,7 @@ class Graph :
         """
             Calcule le rang de chaque sommet du graphe
 
-            version: 1.1
+            version: 1.2
         """
         
         if self.contientCircuit == 'a':
@@ -184,14 +189,14 @@ class Graph :
                 continuer = len(lSommets) > 0
 
             log.info("Graphe vide\nRangs calcules")
-            log.info("Sommets {0}".format(list(range(0,self.nbSommets))))
-            log.info("Rang {0}".format(self.rang))
+            log.info("Sommets\t{0}".format(list(range(0,self.nbSommets))))
+            log.info("Rang\t{0}".format(self.rang))
 
     def estGraphOrdonnancement(self):
         """
             Vérifie si c'est un graphe d'ordonnancement
 
-            Version = 1.0
+            Version: 1.2
         """
 
         log.info("Verification qu'il s'agit d'un graphe d'ordonnancement :")
@@ -230,9 +235,7 @@ class Graph :
         res = res and ans
 
         #arcs incidents vers l’extérieur au point d’entrée de valeur nulle
-        i = 0
-        while  self.rang[i] != 0 and i < self.nbSommets-1:
-            i += 1
+        i = self.rang.index(0)
 
         ans = True
         for case in self.mValeurs[i]:
@@ -246,4 +249,98 @@ class Graph :
         else :
             log.info("Le graphe n'est pas un graphe d'ordonnancement")
 
+        self.estOrdonnancement = res
         return res
+
+    def calcCalendPtot(self):
+        """
+            Calcule le calendrier au plus tôt si le graphe est un graphe d'ordonnancement
+
+            version: 1.0
+        """
+        if self.estOrdonnancement == 'u':
+            log.error("Le graphe n'as pas ete teste pour l'ordonnancement")
+
+        elif self.estOrdonnancement:
+            log.info("Calcul du calendrier au plus tot")
+
+            #Création de la liste des sommets ordonnés par rang croissant
+            sommets = []
+            for rang in range(0,max(self.rang)+1):
+                for sommet in range(0, self.nbSommets):
+                    if self.rang[sommet] == rang :
+                        sommets.append(sommet)
+
+            # Initialisation du calendrier
+            for i in range(self.nbSommets):
+                self.datesAuPlusTot.append('*')
+
+            #Date de départ
+            i = self.rang.index(0)
+            self.datesAuPlusTot[i] = 0
+            sommets.remove(i)
+
+            log.info("Sommet 0 date au plus tot : 0")
+
+            for sommet in sommets:
+                
+                # Construction de la liste des prédécesseurs
+                lPred = []
+                for pred in range(0, self.nbSommets):
+                    if self.mAdjacence[pred][sommet]:
+                        lPred.append(pred)
+                
+                #Calcule des dates par prédécesseurs
+                dates = []
+                for pred in lPred:
+                    dates.append(self.datesAuPlusTot[pred] + self.mValeurs[pred][sommet])
+                
+                #Calcule de la dates au plus tot
+                self.datesAuPlusTot[sommet] = max(dates)
+                log.info("Sommet {0} date au plus tot : {1}".format(sommet,self.datesAuPlusTot[sommet]))
+
+            log.info("\nSommets:\t\t{0}\nDates au plus tot:\t{1}".format(list(range(0,self.nbSommets)), self.datesAuPlusTot))
+
+        else:
+            log.error("Le graphe n'est pas un graphe d'ordonnancement")
+
+    def calcCalendPtard(self):
+        if len(self.datesAuPlusTot) > 0:
+            log.info("Calcule du calendrier au plus tard :")
+
+            #Création de la liste des sommets ordonnés par rang décroissant
+            sommets = []
+            for rang in range(0,max(self.rang)+1):
+                for sommet in range(0, self.nbSommets):
+                    if self.rang[sommet] == rang :
+                        sommets.insert(0,sommet)
+
+            # Initialisation du calendrier
+            for i in range(0,self.nbSommets):
+                self.datesAuPlusTard.append('*')
+
+            # Date de fin
+            f = self.rang.index(max(self.rang))
+            self.datesAuPlusTard[f] = self.datesAuPlusTot[f]
+            sommets.remove(f)
+            log.info("Sommet {0} date au plus tard : {1}".format(f,self.datesAuPlusTard[f]))
+
+            for sommet in sommets:
+                # Construction de la liste des successeurs
+                lSucc = []
+                for succ in range(0, self.nbSommets):
+                    if self.mAdjacence[sommet][succ]:
+                        lSucc.append(succ)
+
+                #Calcule des dates par successeur
+                dates = []
+                for succ in lSucc:
+                    dates.append(self.datesAuPlusTard[succ] - self.mValeurs[sommet][succ])
+
+                #Calcule de la dates au plus tard
+                self.datesAuPlusTard[sommet] = min(dates)
+                log.info("Sommet {0} date au plus tard : {1}".format(sommet,self.datesAuPlusTard[sommet]))
+
+            log.info("\nSommets:\t\t{0}\nDates au plus tard:\t{1}".format(list(range(0,self.nbSommets)), self.datesAuPlusTard))
+        else:
+            log.error("Le calendrier au plus tot n'est pas calculer")

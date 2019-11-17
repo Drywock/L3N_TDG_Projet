@@ -11,7 +11,7 @@ def main():
     """
         Programme principal
 
-        Version : 2.0
+        Version : 2.1
     """
     print('Bienvenue !')
 
@@ -37,7 +37,8 @@ def main():
             if not g.detectionCircuit():
                 g.calcRang()
                 if g.estGraphOrdonnancement():
-                    pass
+                    g.calcCalendPtot()
+                    g.calcCalendPtard()
 
             log.getLogger('').removeHandler(fileHandler)
 
