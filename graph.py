@@ -97,7 +97,7 @@ class Graph :
             Version: 1.2
         """
         
-        log.info("Détection de circuit\nMéthode de détection des points d'entrer")
+        log.info("Detection de circuit\nMethode de detection des points d'entrer")
 
         lSommets = list(range(0,self.nbSommets))
 
@@ -122,10 +122,10 @@ class Graph :
             # Sortie de boucle si on a pas retiré de sommets 
             continuer = len(sToDel) > 0 and len(lSommets) > 0
 
-            log.info("Points d'entrée :")
+            log.info("Points d'entree :")
             if(continuer):
                 log.info(sToDel)
-                log.info("Sommets restant :{0}".format(lSommets))
+                log.info("Sommets restant :\n{0}".format(lSommets))
 
             else:
                 log.info('Aucun')
@@ -148,10 +148,10 @@ class Graph :
         """
         
         if self.contientCircuit == 'a':
-            log.warning("Impossible de Calculer les rangs : detectionCircuit() doit être lancer avant")
+            log.warning("Impossible de Calculer les rangs : detectionCircuit() doit etre lancer avant")
 
         elif (self.contientCircuit):
-            log.warning("Impossible de Calculer les rangs : présence d'un circuit")
+            log.warning("Impossible de Calculer les rangs : presence d'un circuit")
         
         else:
             # Intialisation de la liste des rangs
@@ -178,11 +178,11 @@ class Graph :
                     lSommets.remove(s)
                     self.rang[s] = rang
                 
-                log.info("Rang courant = {0}\nPoints d'entrée :\n{1}".format(rang, sToDel))
+                log.info("Rang courant = {0}\nPoints d'entree :\n{1}".format(rang, sToDel))
 
                 rang+= 1
                 continuer = len(lSommets) > 0
 
-            log.info("Graphe vide\nRangs calculés")
+            log.info("Graphe vide\nRangs calcules")
             log.info("Sommets {0}".format(list(range(0,self.nbSommets))))
             log.info("Rang {0}".format(self.rang))
