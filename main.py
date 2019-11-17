@@ -11,7 +11,7 @@ def main():
     """
         Programme principal
 
-        Version : 2.1
+        Version : 2.2
     """
     print('Bienvenue !')
 
@@ -39,6 +39,7 @@ def main():
                 if g.estGraphOrdonnancement():
                     g.calcCalendPtot()
                     g.calcCalendPtard()
+                    g.calcMarges()
 
             log.getLogger('').removeHandler(fileHandler)
 
@@ -46,7 +47,7 @@ def testGraph():
     """
         Test les differentes methodes de la class Graph
 
-        Version : 1.0
+        Version : 2.0
     """
     log.basicConfig(filename='test.txt',format='%(message)s' , level=log.DEBUG)
     g = Graph()
@@ -54,6 +55,9 @@ def testGraph():
     g.calcRang()
     g.detectionCircuit()
     g.calcRang()
+    g.calcCalendPtot()
+    g.calcCalendPtard()
+    g.calcMarges()
     log.info(g)
 
 main()

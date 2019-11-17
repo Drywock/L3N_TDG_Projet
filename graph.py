@@ -1,7 +1,7 @@
 """
     file : graph.py
     author(s) : Thomas LINTANF, Laurent CALYDON
-    Version : 5.0
+    Version : 6.0
 
     Definition de la classe Graph qui permet de stocker un graph orienter et de lui
     appliquer différents algorithmes.
@@ -14,7 +14,7 @@ class Graph :
     """ 
         classe Graph  : représente un graphe orienté 
         
-        Version: 4.0
+        Version: 5.0
     """
 
     def __init__(self):
@@ -305,6 +305,11 @@ class Graph :
             log.error("Le graphe n'est pas un graphe d'ordonnancement")
 
     def calcCalendPtard(self):
+        """
+            Calcule du calcule du calendrier au plus tard
+
+            version: 1.0
+        """
         if len(self.datesAuPlusTot) > 0:
             log.info("Calcule du calendrier au plus tard :")
 
@@ -344,3 +349,37 @@ class Graph :
             log.info("\nSommets:\t\t{0}\nDates au plus tard:\t{1}".format(list(range(0,self.nbSommets)), self.datesAuPlusTard))
         else:
             log.error("Le calendrier au plus tot n'est pas calculer")
+
+    def calcMarges(self):
+        """
+            Calcule les marges totales et libres
+
+            version: 1.0
+        """
+        # Calcule des marges totales
+        log.info("Calcule des marges Totales :")
+        for i in range(0,self.nbSommets):
+            self.margesTotales.append(self.datesAuPlusTard[i] - self.datesAuPlusTot[i])
+            log.info("Sommet {0} --> marge totale : {1}".format(i,self.margesTotales[i]))
+
+        log.info("Sommets:\t\t{0}\nMarges Totales\t{1}".format(list(range(0,self.nbSommets)), self.margesTotales))
+
+        # Calcule des marges libres
+        log.info("Calcule des marges Libres :")
+
+        for sommet in range(0, self.nbSommets):
+            # Construction de la liste des successeurs
+            lSucc = []
+            for succ in range(0, self.nbSommets):
+                if self.mAdjacence[sommet][succ]:
+                    lSucc.append(succ)
+
+            #calcule de la marge libre par successeur
+            margesLibres = []
+            for succ in lSucc:
+                margesLibres.append(self.datesAuPlusTot[succ] - self.datesAuPlusTot[sommet]-self.mValeurs[sommet][succ])
+            
+            self.margesLibres.append(min(margesLibres))
+            log.info("Sommet {0} --> marge libre {1}".format(sommet,self.margesLibres[sommet]))
+
+        log.info("Sommets:\t\t{0}\nMarges Libres\t{1}".format(list(range(0,self.nbSommets)), self.margesLibres))
