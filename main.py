@@ -1,7 +1,7 @@
 """
     file : main.py
     author(s) : Thomas LINTANF
-    version : 1.1
+    version : 2.0
 """
 
 import logging as log
@@ -11,7 +11,7 @@ def main():
     """
         Programme principal
 
-        Version : 1.1
+        Version : 2.2
     """
     print('Bienvenue !')
 
@@ -20,10 +20,10 @@ def main():
     while(continuer):
         reponse = int(input('Choisissez un graphe entre 1 et 10 (0 pour quitter): '))
 
-        if (reponse == 0):
+        if reponse == 0:
             continuer = False
 
-        elif(reponse < 1 or reponse > 10 ):
+        elif reponse < 1 or reponse > 10 :
             print("Reponse invalide !")
 
         else:
@@ -36,6 +36,10 @@ def main():
             log.info(g)
             if not g.detectionCircuit():
                 g.calcRang()
+                if g.estGraphOrdonnancement():
+                    g.calcCalendPtot()
+                    g.calcCalendPtard()
+                    g.calcMarges()
 
             log.getLogger('').removeHandler(fileHandler)
 
@@ -43,7 +47,7 @@ def testGraph():
     """
         Test les differentes methodes de la class Graph
 
-        Version : 1.0
+        Version : 2.0
     """
     log.basicConfig(filename='test.txt',format='%(message)s' , level=log.DEBUG)
     g = Graph()
@@ -51,6 +55,9 @@ def testGraph():
     g.calcRang()
     g.detectionCircuit()
     g.calcRang()
+    g.calcCalendPtot()
+    g.calcCalendPtard()
+    g.calcMarges()
     log.info(g)
 
 main()
