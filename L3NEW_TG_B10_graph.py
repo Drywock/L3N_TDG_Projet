@@ -208,8 +208,8 @@ class Graph :
                 continuer = len(lSommets) > 0
 
             log.info("Graphe vide\nRangs calcules")
-            log.info("Sommets\t: {0}".format(''.join(["{0}\t".format(i) for i in range(0,self.nbSommets)])))
-            log.info("Rang\t: {0}".format(''.join(["{0}\t".format(i) for i in self.rang])))
+            log.info("Sommets :\t{0}".format(''.join(["{0}\t".format(i) for i in range(0,self.nbSommets)])))
+            log.info("Rang :\t\t{0}".format(''.join(["{0}\t".format(i) for i in self.rang])))
 
     def estGraphOrdonnancement(self):
         """
@@ -318,7 +318,7 @@ class Graph :
                 self.datesAuPlusTot[sommet] = max(dates)
                 log.info("Sommet {0} date au plus tot : {1}".format(sommet,self.datesAuPlusTot[sommet]))
 
-            log.info("\nSommets:\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+            log.info("\nSommets:\t\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
             log.info("Dates au plus tot:\t{0}".format(''.join('{0}\t'.format(i) for i in self.datesAuPlusTot)))
 
         else:
@@ -366,7 +366,7 @@ class Graph :
                 self.datesAuPlusTard[sommet] = min(dates)
                 log.info("Sommet {0} date au plus tard : {1}".format(sommet,self.datesAuPlusTard[sommet]))
 
-            log.info("\nSommets:\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+            log.info("\nSommets:\t\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
             log.info("Dates au plus tard:\t{0}".format(''.join('{0}\t'.format(i) for i in self.datesAuPlusTard)))
         else:
             log.error("Le calendrier au plus tot n'est pas calculer")
@@ -383,7 +383,7 @@ class Graph :
             self.margesTotales.append(self.datesAuPlusTard[i] - self.datesAuPlusTot[i])
             log.info("Sommet {0} --> marge totale : {1}".format(i,self.margesTotales[i]))
 
-        log.info("\nSommets:\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+        log.info("\nSommets:\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
         log.info("Marges Totales:\t{0}".format(''.join('{0}\t'.format(i) for i in self.margesTotales)))
 
         # Calcule des marges libres
