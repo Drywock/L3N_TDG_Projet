@@ -407,5 +407,5 @@ class Graph :
         self.margesLibres.append(0)
         log.info("Sommet {0} --> marge libre {1}".format(self.nbSommets-1,self.margesLibres[self.nbSommets-1]))
 
-        log.info("\nSommets:\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+        log.info("\nSommets:\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
         log.info("Marges Libres:\t{0}".format(''.join('{0}\t'.format(i) for i in self.margesLibres)))
