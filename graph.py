@@ -86,11 +86,30 @@ class Graph :
         """
 
         s = "Graphe :\n - {0} sommets`\n - {1} arcs\nMatrice d'Adjacence :\n".format(self.nbSommets,self.nbArcs)
+        s+="\t"
+        for sommet in range(0,self.nbSommets):
+            s += "{0}\t".format(sommet)
+        s += '\n'
+        indice = 0
         for ligne in self.mAdjacence:
-            s+= str(ligne) + '\n'
+            s += "{0}\t".format(indice)
+            for case in ligne:
+                s += "{0}\t".format('V' if case else 'F')
+            s+='\n'
+            indice += 1
+        
         s+= 'Matrice des Valeurs :\n'
+        s+="\t"
+        for sommet in range(0,self.nbSommets):
+            s += "{0}\t".format(sommet)
+        s += '\n'
+        indice = 0
         for ligne in self.mValeurs:
-            s+= str(ligne) + '\n'
+            s += "{0}\t".format(indice)
+            for case in ligne:
+                s += "{0}\t".format(case)
+            s+='\n'
+            indice += 1
         return s
 
     def detectionCircuit(self):
@@ -189,8 +208,8 @@ class Graph :
                 continuer = len(lSommets) > 0
 
             log.info("Graphe vide\nRangs calcules")
-            log.info("Sommets\t{0}".format(list(range(0,self.nbSommets))))
-            log.info("Rang\t{0}".format(self.rang))
+            log.info("Sommets\t: {0}".format(''.join(["{0}\t".format(i) for i in range(0,self.nbSommets)])))
+            log.info("Rang\t: {0}".format(''.join(["{0}\t".format(i) for i in self.rang])))
 
     def estGraphOrdonnancement(self):
         """
@@ -299,7 +318,8 @@ class Graph :
                 self.datesAuPlusTot[sommet] = max(dates)
                 log.info("Sommet {0} date au plus tot : {1}".format(sommet,self.datesAuPlusTot[sommet]))
 
-            log.info("\nSommets:\t\t{0}\nDates au plus tot:\t{1}".format(list(range(0,self.nbSommets)), self.datesAuPlusTot))
+            log.info("\nSommets:\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+            log.info("Dates au plus tot:\t{0}".format(''.join('{0}\t'.format(i) for i in self.datesAuPlusTot)))
 
         else:
             log.error("Le graphe n'est pas un graphe d'ordonnancement")
@@ -346,7 +366,8 @@ class Graph :
                 self.datesAuPlusTard[sommet] = min(dates)
                 log.info("Sommet {0} date au plus tard : {1}".format(sommet,self.datesAuPlusTard[sommet]))
 
-            log.info("\nSommets:\t\t{0}\nDates au plus tard:\t{1}".format(list(range(0,self.nbSommets)), self.datesAuPlusTard))
+            log.info("\nSommets:\t\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+            log.info("Dates au plus tard:\t{0}".format(''.join('{0}\t'.format(i) for i in self.datesAuPlusTard)))
         else:
             log.error("Le calendrier au plus tot n'est pas calculer")
 
@@ -362,7 +383,8 @@ class Graph :
             self.margesTotales.append(self.datesAuPlusTard[i] - self.datesAuPlusTot[i])
             log.info("Sommet {0} --> marge totale : {1}".format(i,self.margesTotales[i]))
 
-        log.info("Sommets:\t\t{0}\nMarges Totales\t{1}".format(list(range(0,self.nbSommets)), self.margesTotales))
+        log.info("\nSommets:\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+        log.info("Marges Totales:\t{0}".format(''.join('{0}\t'.format(i) for i in self.margesTotales)))
 
         # Calcule des marges libres
         log.info("Calcule des marges Libres :")
@@ -385,4 +407,5 @@ class Graph :
         self.margesLibres.append(0)
         log.info("Sommet {0} --> marge libre {1}".format(self.nbSommets-1,self.margesLibres[self.nbSommets-1]))
 
-        log.info("Sommets:\t\t{0}\nMarges Libres\t{1}".format(list(range(0,self.nbSommets)), self.margesLibres))
+        log.info("\nSommets:\t{0}".format(''.join('{0}\t'.format(i) for i in range(0,self.nbSommets))))
+        log.info("Marges Libres:\t{0}".format(''.join('{0}\t'.format(i) for i in self.margesLibres)))

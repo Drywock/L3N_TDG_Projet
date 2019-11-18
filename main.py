@@ -33,13 +33,21 @@ def main():
 
             g = Graph()
             g.readFile('L3N_B10_g{0}.txt'.format(reponse))
+            log.info('')
             log.info(g)
+            log.info('')
             if not g.detectionCircuit():
+                log.info('')
                 g.calcRang()
+                log.info('')
                 if g.estGraphOrdonnancement():
+                    log.info('')
                     g.calcCalendPtot()
+                    log.info('')
                     g.calcCalendPtard()
+                    log.info('')
                     g.calcMarges()
+                    log.info('')
 
             log.getLogger('').removeHandler(fileHandler)
 
