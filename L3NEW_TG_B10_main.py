@@ -5,7 +5,7 @@
 """
 
 import logging as log
-from graph import Graph
+from L3NEW_TG_B10_graph import Graph
 
 def main():
     """
@@ -28,11 +28,11 @@ def main():
 
         else:
             log.basicConfig(format='%(message)s' , level=log.DEBUG)
-            fileHandler = log.FileHandler(filename='L3N_B10_trace{0}.txt'.format(reponse), mode='w')
+            fileHandler = log.FileHandler(filename='L3NEW_TG_B10_trace{0}.txt'.format(reponse), mode='w')
             log.getLogger('').addHandler(fileHandler)
 
             g = Graph()
-            g.readFile('L3N_B10_g{0}.txt'.format(reponse))
+            g.readFile('L3NEW_TG_B10_g{0}.txt'.format(reponse))
             log.info('')
             log.info(g)
             log.info('')
