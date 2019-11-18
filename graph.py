@@ -306,7 +306,7 @@ class Graph :
 
     def calcCalendPtard(self):
         """
-            Calcule du calcule du calendrier au plus tard
+            Calcule du calendrier au plus tard
 
             version: 1.0
         """
@@ -354,7 +354,7 @@ class Graph :
         """
             Calcule les marges totales et libres
 
-            version: 1.0
+            version: 1.1
         """
         # Calcule des marges totales
         log.info("Calcule des marges Totales :")
@@ -367,7 +367,7 @@ class Graph :
         # Calcule des marges libres
         log.info("Calcule des marges Libres :")
 
-        for sommet in range(0, self.nbSommets):
+        for sommet in range(0, self.nbSommets - 1):
             # Construction de la liste des successeurs
             lSucc = []
             for succ in range(0, self.nbSommets):
@@ -381,5 +381,8 @@ class Graph :
             
             self.margesLibres.append(min(margesLibres))
             log.info("Sommet {0} --> marge libre {1}".format(sommet,self.margesLibres[sommet]))
+
+        self.margesLibres.append(0)
+        log.info("Sommet {0} --> marge libre {1}".format(self.nbSommets-1,self.margesLibres[self.nbSommets-1]))
 
         log.info("Sommets:\t\t{0}\nMarges Libres\t{1}".format(list(range(0,self.nbSommets)), self.margesLibres))
