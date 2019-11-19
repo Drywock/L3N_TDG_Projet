@@ -17,55 +17,55 @@ def main():
 
     continuer = True
 
-    while(continuer):
+    while continuer:
         reponse = int(input('Choisissez un graphe entre 1 et 10 (0 pour quitter): '))
 
         if reponse == 0:
             continuer = False
 
-        elif reponse < 1 or reponse > 10 :
+        elif reponse < 1 or reponse > 10:
             print("Reponse invalide !")
 
         else:
-            log.basicConfig(format='%(message)s' , level=log.DEBUG)
-            fileHandler = log.FileHandler(filename='L3NEW_TG_B10_trace{0}.txt'.format(reponse), mode='w')
-            log.getLogger('').addHandler(fileHandler)
+            log.basicConfig(format='%(message)s', level=log.DEBUG)
+            file_handler = log.FileHandler(filename='L3NEW_TG_B10_trace%s.txt' % reponse, mode='w')
+            log.getLogger('').addHandler(file_handler)
 
-            g = Graph()
-            g.readFile('L3NEW_TG_B10_g{0}.txt'.format(reponse))
+            graphe = Graph()
+            graphe.read_file('L3NEW_TG_B10_g{0}.txt'.format(reponse))
             log.info('')
-            log.info(g)
+            log.info(graphe)
             log.info('')
-            if not g.detectionCircuit():
+            if not graphe.detection_circuit():
                 log.info('')
-                g.calcRang()
+                graphe.calc_rang()
                 log.info('')
-                if g.estGraphOrdonnancement():
+                if graphe.est_graph_ordonnancement():
                     log.info('')
-                    g.calcCalendPtot()
+                    graphe.calc_calend_plus_tot()
                     log.info('')
-                    g.calcCalendPtard()
+                    graphe.calc_calend_plus_tard()
                     log.info('')
-                    g.calcMarges()
+                    graphe.calc_marges()
                     log.info('')
 
-            log.getLogger('').removeHandler(fileHandler)
+            log.getLogger('').removeHandler(file_handler)
 
-def testGraph():
+def test_graph():
     """
         Test les differentes methodes de la class Graph
 
         Version : 2.0
     """
-    log.basicConfig(filename='test.txt',format='%(message)s' , level=log.DEBUG)
-    g = Graph()
-    g.readFile('Graph_0.txt')
-    g.calcRang()
-    g.detectionCircuit()
-    g.calcRang()
-    g.calcCalendPtot()
-    g.calcCalendPtard()
-    g.calcMarges()
-    log.info(g)
+    log.basicConfig(filename='test.txt', format='%(message)s', level=log.DEBUG)
+    graphe = Graph()
+    graphe.read_file('Graph_0.txt')
+    graphe.calc_rang()
+    graphe.detection_circuit()
+    graphe.calc_rang()
+    graphe.calc_calend_plus_tot()
+    graphe.calc_calend_plus_tard()
+    graphe.calc_marges()
+    log.info(graphe)
 
 main()
