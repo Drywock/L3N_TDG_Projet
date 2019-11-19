@@ -44,7 +44,7 @@ class Graph:
             # stockage temporaire des données dans un tableau
             for row in reader:
                 l_rows.append([int(i) for i in row])
-        log.info('Chargement du fichier : %(address)%', address)
+        log.info('Chargement du fichier : %s', address)
 
         # extraction du nombre de sommets et d'arcs
         self.nb_sommets = int(l_rows[0][0])
@@ -186,7 +186,7 @@ class Graph:
                 for sommet_arrivee in liste_sommets:
                     has_pred = False
                     for sommet_depart in liste_sommets:
-                        has_pred = has_pred or self.m_adjacence[sommet_depart][sommet_depart]
+                        has_pred = has_pred or self.m_adjacence[sommet_depart][sommet_arrivee]
 
                     if not has_pred:
                         sommet_a_supr.append(sommet_arrivee)
@@ -254,7 +254,7 @@ class Graph:
         for case in self.m_valeurs[i]:
             ans = ans and (case == '*' or case == 0)
 
-        log.info("Arcs incidents exterieurs du point d'entree a valeur 0 : %s", res)
+        log.info("Arcs incidents exterieurs du point d'entree a valeur 0 : %s", ans)
         res = res and ans
 
         if res:
