@@ -3,7 +3,7 @@
     author(s) : Thomas LINTANF, Laurent CALYDON
     Version : 6.0
 
-    Definition de la classe Graph qui permet de stocker un graph orienter et de lui
+    Definition de la classe Graph qui permet de stocker un graph orienté et de lui
     appliquer différents algorithmes.
 """
 
@@ -11,7 +11,10 @@ import csv
 import logging as log
 
 class Graph:
-    """ classe Graph  : représente un graphe orienté Version: 5.0 """
+    """
+        classe Graph  : représente un graphe orienté
+        Version: 5.0
+    """
 
     def __init__(self):
         """
@@ -76,7 +79,7 @@ class Graph:
     # to do: Améliorer l'affichage des matices
     def __str__(self):
         """
-            fonction de représentation au format string
+            Fonction de représentation au format string
 
             Version: 1.1
         """
@@ -113,11 +116,11 @@ class Graph:
         """
             Cherche si le graphe contient un circuit
             Retourne True si le graphe contient au moins un circuit False sinon
-            ecrit également le resultat sur la propriété contient circuit
+            Écrit également le resultat sur la propriété contient_circuit
 
             Version: 1.2
         """
-        log.info("Detection de circuit\nMethode de detection des points d'entrer")
+        log.info("Detection de circuit\nMéthode de détection des points d'entrés")
 
         liste_sommets = list(range(0, self.nb_sommets))
 
@@ -142,7 +145,7 @@ class Graph:
             # Sortie de boucle si on a pas retiré de sommets
             continuer = len(sommet_a_supr) > 0 and len(liste_sommets) > 0
 
-            log.info("Points d'entree :")
+            log.info("Points d'entrés :")
             if continuer:
                 log.info(sommet_a_supr)
                 log.info("Sommets restant :\n%s", liste_sommets)
@@ -150,11 +153,11 @@ class Graph:
             else:
                 log.info('Aucun')
 
-        # On regarde si il reste des Sommets pour savoir si il y a un circuit
+        # On regarde si il reste des sommets pour savoir si il y a un circuit
         self.contient_circuit = len(liste_sommets) != 0
 
         if self.contient_circuit:
-            log.info('Le graphe contient au moins un cirvuit')
+            log.info('Le graphe contient au moins un circuit')
         else:
             log.info('Le graphe ne contient aucun circuit')
 
@@ -162,15 +165,15 @@ class Graph:
 
     def calc_rang(self):
         """
-            Calcule le rang de chaque sommet du graphe
+            Calcul le rang de chaque sommet du graphe
 
             version: 1.2
         """
         if self.contient_circuit == 'u':
-            log.warning("Calcule des rangs impossible : detectionCircuit() doit etre lancer avant")
+            log.warning("Calcul des rangs impossible : detectionCircuit() doit être lancée avant")
 
         elif self.contient_circuit:
-            log.warning("Impossible de Calculer les rangs : presence d'un circuit")
+            log.warning("Impossible de calculer les rangs : présence d'un circuit")
 
         else:
             # Intialisation de la liste des rangs
@@ -196,12 +199,12 @@ class Graph:
                     liste_sommets.remove(sommet)
                     self.rang[sommet] = rang
 
-                log.info("Rang courant = %d\nPoints d'entree :\n%s", rang, sommet_a_supr)
+                log.info("Rang courant = %d\nPoints d'entrés :\n%s", rang, sommet_a_supr)
 
                 rang += 1
                 continuer = len(liste_sommets) > 0
 
-            log.info("Graphe vide\nRangs calcules")
+            log.info("Graphe vide\nRangs calculés")
             log.info("Sommets :\t%s", ''.join(["%d\t" % i for i in range(0, self.nb_sommets)]))
             log.info("Rang :\t\t%s", ''.join(["%d\t" % i for i in self.rang]))
 
@@ -214,21 +217,21 @@ class Graph:
 
         log.info("Verification qu'il s'agit d'un graphe d'ordonnancement :")
 
-        #Détection d'un seul point d'entrée
+        # Détection d'un seul point d'entrée
         res = self.rang.count(0) == 1
         log.info("A qu'un seul point d'entree : %s", res)
 
-        #Détection d'un seul point de sortie
+        # Détection d'un seul point de sortie
         ans = self.rang.count(max(self.rang)) == 1
         log.info("A qu'un seul point de sortie : %s", ans)
         res = res and ans
 
-        #Vérification de la présence d'un circuit
+        # Vérification de la présence d'un circuit
         ans = not self.contient_circuit
         log.info("Ne contient pas un circuit: %s", ans)
         res = res and ans
 
-        #Vérification des poids identiques pour tous les arcs incidents vers l’extérieur à un sommet
+        # Vérification des poids identiques pour tous les arcs incidents vers l’extérieur à un sommet
         ans = True
         for ligne in self.m_valeurs:
             i = 0
@@ -236,7 +239,7 @@ class Graph:
             while ligne[i] == '*' and i < self.nb_sommets-1:
                 i += 1
 
-            #Vérification pas d’arcs à valeur négative.
+            # Vérification pas d’arcs à valeur négative.
             is_pos = True
             if ligne[i] != '*':
                 is_pos = ligne[i] >= 0
@@ -244,17 +247,17 @@ class Graph:
 
             for case in ligne:
                 ans = ans and (case == '*' or case == ligne[i])
-        log.info("Arcs incidents exterieurs positifs et egaux pour chaque sommets: %s", ans)
+        log.info("Arcs incidents extérieurs positifs et égaux pour chaque sommet: %s", ans)
         res = res and ans
 
-        #arcs incidents vers l’extérieur au point d’entrée de valeur nulle
+        # Arcs incidents vers l’extérieur au point d’entrée de valeur nulle
         i = self.rang.index(0)
 
         ans = True
         for case in self.m_valeurs[i]:
             ans = ans and (case == '*' or case == 0)
 
-        log.info("Arcs incidents exterieurs du point d'entree a valeur 0 : %s", ans)
+        log.info("Arcs incidents extérieurs du point d'entrée à valeur 0 : %s", ans)
         res = res and ans
 
         if res:
@@ -267,17 +270,17 @@ class Graph:
 
     def calc_calend_plus_tot(self):
         """
-            Calcule le calendrier au plus tôt si le graphe est un graphe d'ordonnancement
+            Calcul le calendrier au plus tôt si le graphe est un graphe d'ordonnancement
 
             version: 1.0
         """
         if self.est_ordonnancement == 'u':
-            log.error("Le graphe n'as pas ete teste pour l'ordonnancement")
+            log.error("Le graphe n'as pas été testé pour l'ordonnancement")
 
         elif self.est_ordonnancement:
-            log.info("Calcul du calendrier au plus tot")
+            log.info("Calcul du calendrier au plus tôt")
 
-            #Création de la liste des sommets ordonnés par rang croissant
+            # Création de la liste des sommets ordonnés par rang croissant
             sommets = []
             for rang in range(0, max(self.rang)+1):
                 for sommet in range(0, self.nb_sommets):
@@ -288,7 +291,7 @@ class Graph:
             for i in range(self.nb_sommets):
                 self.dates_au_plus_tot.append('*')
 
-            #Date de départ
+            # Date de départ
             i = self.rang.index(0)
             self.dates_au_plus_tot[i] = 0
             sommets.remove(i)
@@ -302,12 +305,12 @@ class Graph:
                     if self.m_adjacence[pred][sommet]:
                         liste_pred.append(pred)
 
-                #Calcule des dates par prédécesseurs
+                # Calcul des dates par prédécesseurs
                 dates = []
                 for pred in liste_pred:
                     dates.append(self.dates_au_plus_tot[pred] + self.m_valeurs[pred][sommet])
 
-                #Calcule de la dates au plus tot
+                # Calcul de la dates au plus tôt
                 self.dates_au_plus_tot[sommet] = max(dates)
                 log.info("Sommet %d date au plus tot : %d", sommet, self.dates_au_plus_tot[sommet])
 
@@ -319,14 +322,14 @@ class Graph:
 
     def calc_calend_plus_tard(self):
         """
-            Calcule du calendrier au plus tard
+            Calcul du calendrier au plus tard
 
             version: 1.0
         """
         if len(self.dates_au_plus_tot) > 0:
-            log.info("Calcule du calendrier au plus tard :")
+            log.info("Calcul du calendrier au plus tard :")
 
-            #Création de la liste des sommets ordonnés par rang décroissant
+            # Création de la liste des sommets ordonnés par rang décroissant
             sommets = []
             for rang in range(0, max(self.rang)+1):
                 for sommet in range(0, self.nb_sommets):
@@ -349,12 +352,12 @@ class Graph:
                     if self.m_adjacence[sommet][succ]:
                         liste_succ.append(succ)
 
-                #Calcule des dates par successeur
+                # Calcul des dates par successeur
                 dates = []
                 for succ in liste_succ:
                     dates.append(self.dates_au_plus_tard[succ] - self.m_valeurs[sommet][succ])
 
-                #Calcule de la dates au plus tard
+                # Calcule de la dates au plus tard
                 self.dates_au_plus_tard[sommet] = min(dates)
                 log.info("Sommet %d date au plus tard : %d",
                          sommet, self.dates_au_plus_tard[sommet])
@@ -363,15 +366,15 @@ class Graph:
             log.info("Dates au plus tard:\t%s",
                      ''.join('%d\t' % i for i in self.dates_au_plus_tard))
         else:
-            log.error("Le calendrier au plus tot n'est pas calculer")
+            log.error("Le calendrier au plus tôt n'est pas calculé")
 
     def calc_marges(self):
         """
-            Calcule les marges totales et libres
+            Calcul les marges totales et libres
 
             version: 1.1
         """
-        # Calcule des marges totales
+        # Calcul des marges totales
         log.info("Calcule des marges Totales :")
         for i in range(0, self.nb_sommets):
             self.marges_totales.append(self.dates_au_plus_tard[i] - self.dates_au_plus_tot[i])
@@ -380,8 +383,8 @@ class Graph:
         log.info("\nSommets:\t\t%s", ''.join('%d\t' % i for i in range(0, self.nb_sommets)))
         log.info("Marges Totales:\t%s", ''.join('%d\t' % i for i in self.marges_totales))
 
-        # Calcule des marges libres
-        log.info("Calcule des marges Libres :")
+        # Calcul des marges libres
+        log.info("Calcul des marges Libres :")
 
         for sommet in range(0, self.nb_sommets - 1):
             # Construction de la liste des successeurs
@@ -390,7 +393,7 @@ class Graph:
                 if self.m_adjacence[sommet][succ]:
                     liste_succ.append(succ)
 
-            #calcule de la marge libre par successeur
+            # Calcul de la marge libre par successeur
             marges_libres = []
             for succ in liste_succ:
                 marges_libres.append(
