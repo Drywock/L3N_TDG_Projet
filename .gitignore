@@ -3,3 +3,5 @@ __pycache__/
 env/
 L3NEW_TG_B10_trace*
 pseudo_code.txt
+convert.py 
+*.zip
